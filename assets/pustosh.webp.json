@@ -1,0 +1,7 @@
+{
+  "prompt": "Lossless WebP conversion of the owner-supplied pustosh.png artwork, with no resizing or visual edits. Decoded RGB pixels were verified identical to the original PNG.",
+  "source": "pustosh.png",
+  "sourceSha256": "2b82da16d2818aee1c21ad879aed0ee17b004daafc3cdfec03be9b37cfdcaf87",
+  "command": "cwebp -lossless -q 100 -m 6 -exact -metadata all assets/pustosh.png -o assets/pustosh.webp",
+  "sha256": "d56c8cbc5b701bec85293c2bfd7fa9af829b55e4c52afff1d623513c9e179f95"
+}
