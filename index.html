@@ -14,45 +14,113 @@
     <meta property="og:image" content="https://pusto.sh/assets/pustosh.png">
     <meta property="og:image:width" content="1536">
     <meta property="og:image:height" content="1024">
-    <style>
-      html {
-        background: #b4b9ab;
-      }
-
-      body {
-        margin: 0;
-      }
-
-      main {
-        height: 100vh;
-        height: 100dvh;
-      }
-
-      picture,
-      img {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-
-      img {
-        object-fit: cover;
-        /* Keep the brushstroke circle inside the crop on portrait screens. */
-        object-position: 82% 50%;
-      }
-    </style>
+    <link rel="stylesheet" href="scene.css">
+    <script src="scene.js" defer></script>
   </head>
   <body>
     <main aria-label="pusto.sh">
-      <picture>
-        <source srcset="assets/pustosh.webp" type="image/webp">
-        <img
-          src="assets/pustosh.png"
-          width="1536"
-          height="1024"
-          fetchpriority="high"
-        >
-      </picture>
+      <div class="scene">
+        <svg viewBox="0 0 1536 1024" aria-hidden="true">
+          <defs>
+            <linearGradient id="sky" x2="0" y2="1024" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#aeb8af"/>
+              <stop offset="1" stop-color="#c0c0b1"/>
+            </linearGradient>
+            <radialGradient id="sunlight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1142.03 444.76) scale(1191.12 1023.4)" stop-color="#ffe0bc">
+              <stop stop-color="#ffe0bc" offset="0.000" stop-opacity="0.9987"/>
+              <stop stop-color="#ffe0bc" offset="0.025" stop-opacity="0.9975"/>
+              <stop stop-color="#ffe0bc" offset="0.050" stop-opacity="0.9939"/>
+              <stop stop-color="#ffe0bc" offset="0.075" stop-opacity="0.9881"/>
+              <stop stop-color="#ffe0bc" offset="0.100" stop-opacity="0.9804"/>
+              <stop stop-color="#ffe0bc" offset="0.125" stop-opacity="0.9710"/>
+              <stop stop-color="#ffe0bc" offset="0.150" stop-opacity="0.9600"/>
+              <stop stop-color="#ffe0bc" offset="0.175" stop-opacity="0.9316"/>
+              <stop stop-color="#ffe0bc" offset="0.200" stop-opacity="0.8763"/>
+              <stop stop-color="#ffe0bc" offset="0.225" stop-opacity="0.8039"/>
+              <stop stop-color="#ffe0bc" offset="0.250" stop-opacity="0.7242"/>
+              <stop stop-color="#ffe0bc" offset="0.275" stop-opacity="0.6471"/>
+              <stop stop-color="#ffe0bc" offset="0.300" stop-opacity="0.5823"/>
+              <stop stop-color="#ffe0bc" offset="0.325" stop-opacity="0.5271"/>
+              <stop stop-color="#ffe0bc" offset="0.350" stop-opacity="0.4729"/>
+              <stop stop-color="#ffe0bc" offset="0.375" stop-opacity="0.4206"/>
+              <stop stop-color="#ffe0bc" offset="0.400" stop-opacity="0.3714"/>
+              <stop stop-color="#ffe0bc" offset="0.425" stop-opacity="0.3262"/>
+              <stop stop-color="#ffe0bc" offset="0.450" stop-opacity="0.2861"/>
+              <stop stop-color="#ffe0bc" offset="0.475" stop-opacity="0.2496"/>
+              <stop stop-color="#ffe0bc" offset="0.500" stop-opacity="0.2151"/>
+              <stop stop-color="#ffe0bc" offset="0.525" stop-opacity="0.1830"/>
+              <stop stop-color="#ffe0bc" offset="0.550" stop-opacity="0.1539"/>
+              <stop stop-color="#ffe0bc" offset="0.575" stop-opacity="0.1283"/>
+              <stop stop-color="#ffe0bc" offset="0.600" stop-opacity="0.1067"/>
+              <stop stop-color="#ffe0bc" offset="0.625" stop-opacity="0.0876"/>
+              <stop stop-color="#ffe0bc" offset="0.650" stop-opacity="0.0696"/>
+              <stop stop-color="#ffe0bc" offset="0.675" stop-opacity="0.0532"/>
+              <stop stop-color="#ffe0bc" offset="0.700" stop-opacity="0.0391"/>
+              <stop stop-color="#ffe0bc" offset="0.725" stop-opacity="0.0280"/>
+              <stop stop-color="#ffe0bc" offset="0.750" stop-opacity="0.0205"/>
+              <stop stop-color="#ffe0bc" offset="0.775" stop-opacity="0.0151"/>
+              <stop stop-color="#ffe0bc" offset="0.800" stop-opacity="0.0103"/>
+              <stop stop-color="#ffe0bc" offset="0.825" stop-opacity="0.0061"/>
+              <stop stop-color="#ffe0bc" offset="0.850" stop-opacity="0.0029"/>
+              <stop stop-color="#ffe0bc" offset="0.875" stop-opacity="0.0008"/>
+              <stop stop-color="#ffe0bc" offset="0.900" stop-opacity="0.0000"/>
+              <stop stop-color="#ffe0bc" offset="0.925" stop-opacity="0.0000"/>
+              <stop stop-color="#ffe0bc" offset="0.950" stop-opacity="0.0000"/>
+              <stop stop-color="#ffe0bc" offset="0.975" stop-opacity="0.0000"/>
+              <stop stop-color="#ffe0bc" offset="1.000" stop-opacity="0.0000"/>
+            </radialGradient>
+          </defs>
+          <path d="M0 0H1536V1024H0Z" fill="url(#sky)"/>
+          <path d="M0 0H1536V1024H0Z" fill="url(#sunlight)"/>
+        </svg>
+        <svg viewBox="0 0 1536 1024" aria-hidden="true">
+          <defs>
+            <radialGradient id="bloom">
+              <stop stop-color="#fff0cd" stop-opacity="0.75"/>
+              <stop offset="0.3" stop-color="#ffe0ae" stop-opacity="0.45"/>
+              <stop offset="0.65" stop-color="#ffd0a0" stop-opacity="0.12"/>
+              <stop offset="1" stop-color="#ffd0a0" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="wave-warm">
+              <stop stop-color="#f2ad84" stop-opacity="0"/>
+              <stop offset="0.2" stop-color="#f2ad84" stop-opacity="0"/>
+              <stop offset="0.4" stop-color="#f2ad84" stop-opacity="0.12"/>
+              <stop offset="0.58" stop-color="#f2b88d" stop-opacity="0.55"/>
+              <stop offset="0.72" stop-color="#ffe9c6" stop-opacity="0.4"/>
+              <stop offset="0.87" stop-color="#f5d8b5" stop-opacity="0.1"/>
+              <stop offset="1" stop-color="#f5d8b5" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="wave-sage">
+              <stop stop-color="#a3b8a6" stop-opacity="0"/>
+              <stop offset="0.22" stop-color="#a3b8a6" stop-opacity="0"/>
+              <stop offset="0.42" stop-color="#a3b8a6" stop-opacity="0.18"/>
+              <stop offset="0.58" stop-color="#c3d2b6" stop-opacity="0.4"/>
+              <stop offset="0.73" stop-color="#eee8bf" stop-opacity="0.24"/>
+              <stop offset="0.88" stop-color="#f5e6c1" stop-opacity="0.08"/>
+              <stop offset="1" stop-color="#f5e6c1" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <g id="light"></g>
+        </svg>
+        <svg viewBox="0 0 1536 1024" aria-hidden="true">
+          <defs>
+            <linearGradient id="rear-hill" x2="0" y1="672" y2="1024" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#7c836f"/>
+              <stop offset="1" stop-color="#757e69"/>
+            </linearGradient>
+            <linearGradient id="front-hill" x2="0" y1="742" y2="1024" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#59624e"/>
+              <stop offset="1" stop-color="#4e5845"/>
+            </linearGradient>
+          </defs>
+          <path d="M0 712.56C42.67 706.61 85.33 698.90 128 691.79C170.67 684.68 213.33 678.17 256 674.62C298.67 671.08 341.33 670.50 384 672.95C426.67 675.40 469.33 680.88 512 687.04C554.67 693.20 597.33 700.03 640 706.13C682.67 712.23 725.33 717.58 768 723.06C810.67 728.54 853.33 734.14 896 737.93C938.67 741.72 981.33 743.70 1024 743.00C1066.67 742.29 1109.33 738.90 1152 733.89C1194.67 728.87 1237.33 722.22 1280 715.78C1322.67 709.34 1365.33 703.10 1408 699.08C1450.33 695.08 1492.67 693.26 1535 695.58H1536V1024H0Z" fill="url(#rear-hill)"/>
+          <path d="M0 743.89C42.67 741.88 85.33 741.02 128 741.00C170.67 740.98 213.33 741.80 256 743.17C298.67 744.54 341.33 746.46 384 748.66C426.67 750.86 469.33 753.35 512 755.47C554.67 757.59 597.33 759.35 640 761.47C682.67 763.58 725.33 766.05 768 768.11C810.67 770.17 853.33 771.82 896 773.65C938.67 775.49 981.33 777.52 1024 779.22C1066.67 780.91 1109.33 782.27 1152 783.82C1194.67 785.37 1237.33 787.12 1280 788.57C1322.67 790.03 1365.33 791.20 1408 792.11C1450.33 793.00 1492.67 793.63 1535 794.00H1536V1024H0Z" fill="url(#front-hill)"/>
+        </svg>
+        <div class="grain" aria-hidden="true"></div>
+        <button class="circle" type="button" aria-label="Send a wave of light" disabled>
+          <img src="assets/circle.svg" width="240" height="230" alt="" draggable="false" fetchpriority="high">
+        </button>
+      </div>
     </main>
   </body>
 </html>
