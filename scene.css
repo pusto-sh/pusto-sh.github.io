@@ -1,6 +1,21 @@
 html {
+  --viewport-height: 100vh;
+  --browser-bleed: 0px;
   color-scheme: light;
   background: #b4b9ab;
+  overflow: hidden;
+  overscroll-behavior: none;
+  scroll-padding-top: var(--browser-bleed);
+}
+
+@supports (height: 100lvh) {
+  html {
+    --viewport-height: 100lvh;
+  }
+}
+
+html.browser-bleed {
+  --browser-bleed: clamp(64px, 15vh, 120px);
 }
 
 body {
@@ -8,9 +23,9 @@ body {
 }
 
 main {
+  --scene-height: calc(var(--viewport-height) + 2 * var(--browser-bleed));
   position: relative;
-  height: 100vh;
-  height: 100dvh;
+  height: var(--scene-height);
   overflow: hidden;
   isolation: isolate;
 }
@@ -20,16 +35,9 @@ main {
   position: absolute;
   top: 50%;
   left: 82%;
-  width: max(100vw, 150vh);
-  height: max(100vh, 66.666667vw);
+  width: max(100vw, calc(var(--scene-height) * 1.5));
+  height: max(var(--scene-height), 66.666667vw);
   transform: translate(-82%, -50%);
-}
-
-@supports (height: 100dvh) {
-  .scene {
-    width: max(100vw, 150dvh);
-    height: max(100dvh, 66.666667vw);
-  }
 }
 
 .scene > svg,

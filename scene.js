@@ -4,6 +4,27 @@ const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const activePulses = new Set();
 const svgNamespace = "http://www.w3.org/2000/svg";
 
+// iOS Safari paints behind its bars only when artwork extends past the scroll position.
+if (CSS.supports("-webkit-touch-callout", "none")) {
+  const browser = matchMedia("(pointer: coarse) and (display-mode: browser)");
+  const root = document.documentElement;
+
+  function fitBrowserEdges() {
+    root.classList.toggle("browser-bleed", browser.matches);
+    if (window.visualViewport?.scale > 1) return;
+    const offset = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+    if (Math.abs(scrollY - offset) > 0.5) {
+      window.scrollTo({ top: offset, left: 0, behavior: "instant" });
+    }
+  }
+
+  fitBrowserEdges();
+  browser.addEventListener("change", fitBrowserEdges);
+  window.addEventListener("pageshow", fitBrowserEdges);
+  window.addEventListener("resize", fitBrowserEdges);
+  window.addEventListener("scroll", fitBrowserEdges, { passive: true });
+}
+
 function circle(radius, fill) {
   const element = document.createElementNS(svgNamespace, "circle");
   element.setAttribute("r", radius);
