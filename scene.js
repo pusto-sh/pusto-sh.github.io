@@ -37,6 +37,19 @@ if (CSS.supports("-webkit-touch-callout", "none")) {
   window.addEventListener("scroll", fitBrowserEdges, { passive: true });
 }
 
+// Supply SVG wash spacing in browsers without typed CSS arithmetic.
+if (!CSS.supports("width", "calc(1px / 1px * 1px)")) {
+  const scene = document.querySelector(".scene");
+  function fitWashes() {
+    const { width, height } = scene.getBoundingClientRect();
+    const depth = Math.max(0, (height / width * 1536 - 1024) * 0.23828125);
+    scene.style.setProperty("--ground-extra-depth", depth);
+  }
+  fitWashes();
+  window.addEventListener("resize", fitWashes);
+  window.addEventListener("pageshow", fitWashes);
+}
+
 function circle(radius, fill) {
   const element = document.createElementNS(svgNamespace, "circle");
   element.setAttribute("r", radius);

@@ -39,6 +39,11 @@ fn brushPoint(point: vec2f) -> vec2f {
   return CENTER + (point - CENTER) * u.view.zw / (u.view.z * brushScale());
 }
 
+fn groundPoint(point: vec2f) -> vec2f {
+  // Pin the horizon while keeping terrain units square on portrait screens.
+  return vec2f(point.x, 780.0 + (point.y - 780.0) * u.view.w / u.view.z);
+}
+
 fn hash(p: vec2f) -> f32 {
   var q = fract(vec3f(p.x, p.y, p.x) * 0.1031);
   q += dot(q, q.yzx + 33.33);

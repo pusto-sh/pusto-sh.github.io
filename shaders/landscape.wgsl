@@ -123,21 +123,23 @@ fn mineralWashes(point: vec2f, depth: f32, near: bool, time: f32) -> vec3f {
     + mineralNoise(paper * vec2f(0.009, 0.023) + offset + 24.8) * 0.36;
   let washTime = time + select(41.0, 0.0, near);
   let seedOffset = select(0.23, 0.0, near);
-  let sage = pigmentWash(washDistance(p, WASH_SAGE) + ragged, settling,
+  // Spread fixed-size washes through the extra foreground depth in portrait layouts.
+  let extraDepth = select(0.0, 244.0 * (u.view.w / u.view.z - 1.0), near);
+  let sage = pigmentWash(washDistance(p - vec2f(0.0, extraDepth * 0.14), WASH_SAGE) + ragged, settling,
     vec3f(-0.053, -0.029, -0.034), 0.17 + seedOffset, washTime);
-  let stone = pigmentWash(washDistance(p, WASH_STONE) + ragged, settling,
+  let stone = pigmentWash(washDistance(p - vec2f(0.0, extraDepth * 0.02), WASH_STONE) + ragged, settling,
     vec3f(-0.003, -0.013, -0.032), 0.83 + seedOffset, washTime);
-  let east = pigmentWash(washDistance(p, WASH_EAST) + ragged, settling,
+  let east = pigmentWash(washDistance(p - vec2f(0.0, extraDepth * 0.34), WASH_EAST) + ragged, settling,
     vec3f(-0.035, -0.018, -0.024), 1.61 + seedOffset, washTime);
   var washes = sage + stone + east;
   if (near) {
-    washes += pigmentWash(washDistance(p, WASH_SAGE_POOL) + ragged, settling,
+    washes += pigmentWash(washDistance(p - vec2f(0.0, extraDepth * 0.65), WASH_SAGE_POOL) + ragged, settling,
       vec3f(-0.024, -0.014, -0.018), 2.39, washTime);
-    washes += pigmentWash(washDistance(p, WASH_STONE_POOL) + ragged, settling,
+    washes += pigmentWash(washDistance(p - vec2f(0.0, extraDepth * 0.88), WASH_STONE_POOL) + ragged, settling,
       vec3f(-0.025, -0.032, -0.042), 1.04, washTime);
-    washes += pigmentWash(washDistance(p, WASH_EAST_POOL) + ragged, settling,
+    washes += pigmentWash(washDistance(p - vec2f(0.0, extraDepth * 0.92), WASH_EAST_POOL) + ragged, settling,
       vec3f(-0.029, -0.017, -0.022), 1.95, washTime);
-    washes += pigmentWash(washDistance(p, WASH_CHALK) + ragged, settling,
+    washes += pigmentWash(washDistance(p - vec2f(0.0, extraDepth * 0.52), WASH_CHALK) + ragged, settling,
       vec3f(0.014, 0.012, 0.009), 2.65, washTime);
   }
   let fibres = noise(paper * vec2f(0.60, 0.85) + offset) - 0.5;
@@ -235,19 +237,20 @@ fn ink(p: vec2f) -> f32 {
   color = mix(color, vec3f(1.0, 0.77, 0.48), wave.z * 0.075);
   color += vec3f(0.024, 0.012, 0.003) * wave.z;
 
-  let rear = hill(point.x, false);
-  let front = hill(point.x, true);
-  let edgeWidth = max(0.45, fwidth(point.y) * 0.65);
-  let rearMask = smoothstep(rear - edgeWidth, rear + edgeWidth, point.y);
-  let frontMask = smoothstep(front - edgeWidth, front + edgeWidth, point.y);
+  let terrain = groundPoint(point);
+  let rear = hill(terrain.x, false);
+  let front = hill(terrain.x, true);
+  let edgeWidth = max(0.45, fwidth(terrain.y) * 0.65);
+  let rearMask = smoothstep(rear - edgeWidth, rear + edgeWidth, terrain.y);
+  let frontMask = smoothstep(front - edgeWidth, front + edgeWidth, terrain.y);
   if (rearMask > 0.0) {
     let skyLight = groundIllumination(time);
     if (frontMask < 1.0) {
-      let rearColor = meadow(point, max(0.0, point.y - rear), false, time, skyLight);
+      let rearColor = meadow(terrain, max(0.0, terrain.y - rear), false, time, skyLight);
       color = mix(color, rearColor, rearMask);
     }
     if (frontMask > 0.0) {
-      let frontColor = meadow(point, max(0.0, point.y - front), true, time, skyLight);
+      let frontColor = meadow(terrain, max(0.0, terrain.y - front), true, time, skyLight);
       color = mix(color, frontColor, frontMask);
     }
   }
@@ -282,7 +285,7 @@ fn ink(p: vec2f) -> f32 {
   let edge = clamp(length(rim) * 1.4, 0.0, 1.0);
   let edgeLight = u.pointer.z * 0.7 + u.pointer.w * 0.9 + u.interaction.y * 0.5;
   color += edge * vec3f(1.3, 0.95, 0.56) * edgeLight;
-  let paperPoint = mix(skyPoint, point, rearMask);
+  let paperPoint = mix(skyPoint, terrain, rearMask);
   let paper = (noise(paperPoint * 0.5) - 0.5) * 0.007 + (hash(paperPoint * 1.7) - 0.5) * 0.004;
   color += paper * mix(1.0, 0.15, rearMask);
   // Alpha stores terrain coverage for bloom and chromatic-aberration masking.

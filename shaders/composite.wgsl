@@ -21,7 +21,7 @@
   let vignette = dot(in.uv - 0.5, in.uv - 0.5);
   color *= 1.0 - vignette * 0.07;
   let skyGrain = hash(in.position.xy + fract(u.frame.z * 0.07 * u.interaction.z) * 73.0) - 0.5;
-  let landGrain = (hash(p * 1.7 + 83.2) - 0.5) * 0.45;
+  let landGrain = (hash(groundPoint(p) * 1.7 + 83.2) - 0.5) * 0.45;
   color += mix(landGrain, skyGrain, atmosphere) / 255.0;
   return vec4f(color, 1.0);
 }

@@ -18,6 +18,9 @@ float brushScale() { return min(view.w/view.z,1.5); }
 vec2 brushPoint(vec2 point) {
   return CENTER+(point-CENTER)*view.zw/(view.z*brushScale());
 }
+vec2 groundPoint(vec2 point) {
+  return vec2(point.x,780.+(point.y-780.)*view.w/view.z);
+}
 float hash(vec2 p) {
   vec3 q=fract(vec3(p.x,p.y,p.x)*.1031);
   q+=dot(q,q.yzx+33.33);
@@ -162,15 +165,16 @@ vec3 mineralWashes(vec2 point,float depth,bool near,float time) {
   float settling=mineralNoise(paper*vec2(.031,.074)+offset+71.2)*.64
     +mineralNoise(paper*vec2(.009,.023)+offset+24.8)*.36;
   float washTime=time+(near?0.:41.),seedOffset=near?0.:.23;
-  vec3 sage=pigmentWash(washDistance(p,WASH_SAGE)+ragged,settling,vec3(-0.053, -0.029, -0.034),0.17+seedOffset,washTime);
-  vec3 stone=pigmentWash(washDistance(p,WASH_STONE)+ragged,settling,vec3(-0.003, -0.013, -0.032),0.83+seedOffset,washTime);
-  vec3 east=pigmentWash(washDistance(p,WASH_EAST)+ragged,settling,vec3(-0.035, -0.018, -0.024),1.61+seedOffset,washTime);
+  float extraDepth=near?244.*(view.w/view.z-1.):0.;
+  vec3 sage=pigmentWash(washDistance(p-vec2(0.,extraDepth*.14),WASH_SAGE)+ragged,settling,vec3(-0.053, -0.029, -0.034),0.17+seedOffset,washTime);
+  vec3 stone=pigmentWash(washDistance(p-vec2(0.,extraDepth*.02),WASH_STONE)+ragged,settling,vec3(-0.003, -0.013, -0.032),0.83+seedOffset,washTime);
+  vec3 east=pigmentWash(washDistance(p-vec2(0.,extraDepth*.34),WASH_EAST)+ragged,settling,vec3(-0.035, -0.018, -0.024),1.61+seedOffset,washTime);
   vec3 washes=sage+stone+east;
   if(near) {
-    washes+=pigmentWash(washDistance(p,WASH_SAGE_POOL)+ragged,settling,vec3(-0.024, -0.014, -0.018),2.39,washTime);
-    washes+=pigmentWash(washDistance(p,WASH_STONE_POOL)+ragged,settling,vec3(-0.025, -0.032, -0.042),1.04,washTime);
-    washes+=pigmentWash(washDistance(p,WASH_EAST_POOL)+ragged,settling,vec3(-0.029, -0.017, -0.022),1.95,washTime);
-    washes+=pigmentWash(washDistance(p,WASH_CHALK)+ragged,settling,vec3(0.014, 0.012, 0.009),2.65,washTime);
+    washes+=pigmentWash(washDistance(p-vec2(0.,extraDepth*.65),WASH_SAGE_POOL)+ragged,settling,vec3(-0.024, -0.014, -0.018),2.39,washTime);
+    washes+=pigmentWash(washDistance(p-vec2(0.,extraDepth*.88),WASH_STONE_POOL)+ragged,settling,vec3(-0.025, -0.032, -0.042),1.04,washTime);
+    washes+=pigmentWash(washDistance(p-vec2(0.,extraDepth*.92),WASH_EAST_POOL)+ragged,settling,vec3(-0.029, -0.017, -0.022),1.95,washTime);
+    washes+=pigmentWash(washDistance(p-vec2(0.,extraDepth*.52),WASH_CHALK)+ragged,settling,vec3(0.014, 0.012, 0.009),2.65,washTime);
   }
   float fibres=noise(paper*vec2(.60,.85)+offset)-.5;
   float fine=mineralNoise(paper*vec2(.23,.38)+offset+91.5)-.5;
@@ -247,17 +251,18 @@ void main() {
   color*=1.+wave.w*.045;
   color=mix(color,vec3(1.,.77,.48),wave.z*.075);
   color+=vec3(.024,.012,.003)*wave.z;
-  float rear=hill(point.x,false),front=hill(point.x,true),edgeWidth=max(.45,fwidth(point.y)*.65);
-  float rearMask=smoothstep(rear-edgeWidth,rear+edgeWidth,point.y);
-  float frontMask=smoothstep(front-edgeWidth,front+edgeWidth,point.y);
+  vec2 terrain=groundPoint(point);
+  float rear=hill(terrain.x,false),front=hill(terrain.x,true),edgeWidth=max(.45,fwidth(terrain.y)*.65);
+  float rearMask=smoothstep(rear-edgeWidth,rear+edgeWidth,terrain.y);
+  float frontMask=smoothstep(front-edgeWidth,front+edgeWidth,terrain.y);
   if(rearMask>0.) {
     vec3 skyLight=groundIllumination(time);
     if(frontMask<1.) {
-      vec3 rearColor=meadow(point,max(0.,point.y-rear),false,time,skyLight);
+      vec3 rearColor=meadow(terrain,max(0.,terrain.y-rear),false,time,skyLight);
       color=mix(color,rearColor,rearMask);
     }
     if(frontMask>0.) {
-      vec3 frontColor=meadow(point,max(0.,point.y-front),true,time,skyLight);
+      vec3 frontColor=meadow(terrain,max(0.,terrain.y-front),true,time,skyLight);
       color=mix(color,frontColor,frontMask);
     }
   }
@@ -288,14 +293,14 @@ void main() {
   float halo=max(0.,(ink(ringPoint+vec2(4,0))+ink(ringPoint-vec2(4,0))
     +ink(ringPoint+vec2(0,4))+ink(ringPoint-vec2(0,4)))*.25-mask.g);
   color+=halo*vec3(.40,.28,.13)*edgeLight;
-  vec2 paperPoint=mix(skyPoint,point,rearMask);
+  vec2 paperPoint=mix(skyPoint,terrain,rearMask);
   color+=((noise(paperPoint*.5)-.5)*.007+(hash(paperPoint*1.7)-.5)*.004)*mix(1.,.15,rearMask);
   float peak=max(color.r,max(color.g,color.b));
   float shoulder=.94+.06*(1.-exp(-max(peak-.94,0.)/.06));
   color*=min(1.,shoulder/max(peak,.0001));
   color*=1.-dot(uv-.5,uv-.5)*.07;
   float skyGrain=hash(gl_FragCoord.xy+fract(time*.07)*73.)-.5;
-  float landGrain=(hash(point*1.7+83.2)-.5)*.45;
+  float landGrain=(hash(terrain*1.7+83.2)-.5)*.45;
   color+=mix(skyGrain,landGrain,rearMask)/255.;
   outColor=vec4(color,1);
 }

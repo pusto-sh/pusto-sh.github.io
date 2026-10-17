@@ -26,6 +26,8 @@ Use `?renderer=webgl2` or `?renderer=svg` to force a fallback. `main[data-render
 
 - Keep WGSL, GLSL, and SVG geometry aligned in the 1536 × 1024 coordinate system. Keep the 128-byte uniform layout synchronized between `atmosphere.js` and both GPU backends.
 - The scene fits the viewport width with independent x/y scales in `view.zw`. Sky textures, brush, and waves use uniform scaling, capped at 1.5 times the horizontal scene scale; keep the CSS button bounds aligned with that mapping.
+- Terrain uses the horizontal scene scale in both axes, anchored at world y=780 (76.171875% of the scene height). Keep `groundPoint` and the SVG `.terrain` transform aligned; fallback fills extend below the viewBox for portrait screens.
+- Portrait foreground washes shift independently through the extra terrain depth without scaling their masks or grain. Keep the WGSL/GLSL depth fractions and SVG `--wash-depth` values synchronized; CSS computes the SVG spacing, with a resize fallback in `scene.js` for older engines.
 - The `v` query on `scene.js` propagates to renderer modules and shaders. Bump the script and stylesheet revisions in `index.html` when their interfaces or layout change. Shader requests revalidate cached content.
 - Hill contours, wash boundaries, and ground grain stay fixed. Ground animation changes density and illumination only. Refraction excludes the terrain and brush mask; the scene alpha channel masks bloom and chromatic separation off the ground.
 - Startup reveals the GPU canvas after its first frame. Initialization or graphics failures fall back from WebGPU to WebGL2 to SVG. Forced colors and JavaScript-disabled browsers use SVG directly.
