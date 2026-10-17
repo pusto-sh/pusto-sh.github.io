@@ -1,13 +1,31 @@
 # pusto.sh
 
-An SVG landscape for [pusto.sh](https://pusto.sh), hosted on GitHub Pages. Click or tap the brushstroke circle to send waves of color through the sky. Keyboard activation works with Enter or Space; reduced motion uses a gentle glow.
+Static landing page for [pusto.sh](https://pusto.sh), hosted on GitHub Pages with the custom domain in `CNAME`. No build step or runtime dependencies.
 
 ## Preview
 
 ```sh
-python3 -m http.server 8000
+python3 -m http.server 8001 --bind 127.0.0.1
 ```
 
-Open http://localhost:8000. No build step or runtime dependencies.
+Open http://localhost:8001. WebGPU requires localhost or HTTPS.
 
-`index.html` draws the sky and hills; `scene.css` keeps the scene and button aligned across screen sizes; `scene.js` handles the light pulses. The circle is traced from the original artwork, with a small procedural SVG texture. The original PNG and WebP remain in `assets/` as references and are not loaded by the scene.
+Use `?renderer=webgl2` or `?renderer=svg` to force a fallback. `main[data-renderer]` identifies the active GPU backend; the attribute is absent in SVG mode.
+
+## Files
+
+- `index.html`: metadata, SVG fallback, circle button, and startup visibility gate.
+- `scene.css`: layout, coordinate alignment, and mobile Safari viewport bleed.
+- `scene.js`: startup, Safari scroll offset, and SVG interaction.
+- `atmosphere.js`: input, animation state, resizing, adaptive resolution, and renderer recovery.
+- `renderers/webgpu.js` and `shaders/*.wgsl`: floating-point scene rendering, two-pass bloom, and compositing.
+- `renderers/webgl.js` and `shaders/fallback.frag`: single-pass WebGL2 fallback.
+- `assets/circle.svg`: fallback brushstroke and GPU texture mask. `assets/pustosh.png` supplies the Open Graph image.
+
+## Maintenance
+
+- Keep WGSL, GLSL, and SVG geometry aligned in the 1536 × 1024 coordinate system. Keep the 128-byte uniform layout synchronized between `atmosphere.js` and both GPU backends.
+- Hill contours, wash boundaries, and ground grain stay fixed. Ground animation changes density and illumination only. Refraction excludes the terrain and brush mask; the scene alpha channel masks bloom and chromatic separation off the ground.
+- Startup reveals the GPU canvas after its first frame. Initialization or graphics failures fall back from WebGPU to WebGL2 to SVG. Forced colors and JavaScript-disabled browsers use SVG directly.
+- Reduced motion freezes ambient animation, disables expanding waves and the startup fade, and stops rendering at rest. Hidden tabs pause rendering.
+- Check click/tap, hold/release, Enter/Space, reduced motion, renderer fallbacks, and mobile Safari browser controls after relevant changes.

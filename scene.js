@@ -3,6 +3,18 @@ const light = document.querySelector("#light");
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const activePulses = new Set();
 const svgNamespace = "http://www.w3.org/2000/svg";
+let atmosphere;
+const canAnimate = typeof Element.prototype.animate === "function";
+
+function revealScene() {
+  document.documentElement.classList.remove("render-pending");
+  button.disabled = !canAnimate;
+}
+
+function rendererReady() {
+  settle();
+  revealScene();
+}
 
 // iOS Safari paints behind its bars only when artwork extends past the scroll position.
 if (CSS.supports("-webkit-touch-callout", "none")) {
@@ -35,7 +47,7 @@ function circle(radius, fill) {
 }
 
 function releaseLight() {
-  // Keep rapid tapping bounded without interrupting a wave already in flight.
+  if (atmosphere?.pulse()) return;
   if (document.hidden || activePulses.size >= 3) return;
 
   const group = document.createElementNS(svgNamespace, "g");
@@ -55,30 +67,34 @@ function releaseLight() {
   const bloom = circle(440, "bloom");
   group.append(bloom);
   animations.push(bloom.animate(
-    [{ opacity: 0 }, { opacity: 0.65, offset: 0.15 }, { opacity: 0 }],
+    [{ opacity: 0 }, { opacity: reducedMotion.matches ? 0.35 : 0.18, offset: 0.15 }, { opacity: 0 }],
     { duration: reducedMotion.matches ? 700 : 1700, easing: "ease-out" },
   ));
 
   if (!reducedMotion.matches) {
-    for (const [index, fill] of ["wave-warm", "wave-sage"].entries()) {
-      const wave = circle(600, fill);
-      group.append(wave);
-      animations.push(wave.animate([
-        { transform: "scale(0.08)", opacity: 0 },
-        { transform: "scale(0.22)", opacity: 0.8, offset: 0.1 },
-        { transform: "scale(0.8)", opacity: 0.7, offset: 0.38 },
-        { transform: "scale(1.65)", opacity: 0.4, offset: 0.72 },
-        { transform: "scale(2.5)", opacity: 0 },
-      ], {
-        duration: 4000,
-        delay: index * 420,
-        easing: "cubic-bezier(0.22, 0.65, 0.3, 1)",
-        fill: "both",
-      }));
-    }
+    const wave = circle(680, "wave-warm");
+    group.append(wave);
+    const frames = Array.from({ length: 61 }, (_, i) => {
+      const age = i / 60 * 7.5;
+      const t = age * 1.05;
+      const travel = 1 - (1 + t) * Math.exp(-t);
+      const scale = 0.30 + travel * 2.9;
+      const fade = Math.max(0, Math.min(1, (age - 5) / 2.5));
+      return {
+        offset: i / 60,
+        transform: `scale(${scale * 1.06}, ${scale * 0.96})`,
+        opacity: 0.65 * (1 - Math.exp(-age * 10)) * Math.exp(-age * 0.28)
+          * (1 - fade * fade * (3 - 2 * fade)),
+      };
+    });
+    animations.push(wave.animate(frames, {
+      duration: 7500,
+      easing: "linear",
+      fill: "both",
+    }));
   }
 
-  // Cancellation also settles the cleanup path; no animation loop runs at rest.
+  // Cancellation rejects finished; handle it so pulse disposal still runs.
   Promise.all(animations.map(animation => animation.finished.catch(() => {})))
     .then(() => pulse.dispose());
 }
@@ -87,8 +103,8 @@ function settle() {
   for (const pulse of activePulses) pulse.dispose();
 }
 
-if (typeof Element.prototype.animate === "function") {
-  button.disabled = false;
+if (canAnimate) {
+  button.disabled = document.documentElement.classList.contains("render-pending");
   button.addEventListener("click", releaseLight);
 }
 
@@ -97,3 +113,14 @@ document.addEventListener("visibilitychange", () => {
 });
 window.addEventListener("pagehide", settle);
 reducedMotion.addEventListener("change", settle);
+
+import("./atmosphere.js")
+  .then(({ createAtmosphere }) => createAtmosphere(document.querySelector("main"), button, reducedMotion, rendererReady))
+  .then(renderer => {
+    atmosphere = renderer;
+    if (!renderer) revealScene();
+  })
+  .catch(error => {
+    console.warn("Using the SVG landscape:", error);
+    revealScene();
+  });

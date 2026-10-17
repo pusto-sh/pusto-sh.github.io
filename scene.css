@@ -38,6 +38,37 @@ main {
   width: max(100vw, calc(var(--scene-height) * 1.5));
   height: max(var(--scene-height), 66.666667vw);
   transform: translate(-82%, -50%);
+  z-index: 1;
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 350ms ease-out;
+}
+
+main[data-renderer] .atmosphere {
+  opacity: 1;
+}
+
+html.render-pending .scene > svg,
+html.render-pending .grain,
+html.render-pending .circle img,
+main[data-renderer] .scene > svg,
+main[data-renderer] .grain,
+main[data-renderer] .circle img {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atmosphere {
+    transition: none;
+  }
 }
 
 .scene > svg,
@@ -76,6 +107,10 @@ main {
   cursor: pointer;
 }
 
+main[data-renderer] .circle {
+  transform: scale(1.16);
+}
+
 .circle img {
   display: block;
   width: 100%;
@@ -87,7 +122,8 @@ main {
 
 @media (hover: hover) {
   .circle:enabled:hover img {
-    filter: brightness(1.04);
+    filter: drop-shadow(0 0 2px rgb(255 218 158 / 65%))
+      drop-shadow(0 0 7px rgb(255 206 141 / 35%));
   }
 }
 

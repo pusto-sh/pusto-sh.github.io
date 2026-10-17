@@ -13,8 +13,16 @@
     <meta property="og:image" content="https://pusto.sh/assets/pustosh.png">
     <meta property="og:image:width" content="1536">
     <meta property="og:image:height" content="1024">
-    <link rel="stylesheet" href="scene.css?v=2">
-    <script src="scene.js?v=2" defer></script>
+    <script>
+      // Hide SVG before first paint while a GPU renderer initializes.
+      if (new URLSearchParams(location.search).get("renderer") !== "svg"
+        && !matchMedia("(forced-colors: active)").matches) {
+        document.documentElement.classList.add("render-pending");
+      }
+    </script>
+    <link rel="stylesheet" href="scene.css?v=6">
+    <script src="scene.js?v=7" type="module" onerror="document.documentElement.classList.remove('render-pending')"></script>
+    <script nomodule>document.documentElement.classList.remove("render-pending");</script>
   </head>
   <body>
     <main aria-label="pusto.sh">
@@ -82,40 +90,63 @@
             </radialGradient>
             <radialGradient id="wave-warm">
               <stop stop-color="#f2ad84" stop-opacity="0"/>
-              <stop offset="0.2" stop-color="#f2ad84" stop-opacity="0"/>
-              <stop offset="0.4" stop-color="#f2ad84" stop-opacity="0.12"/>
-              <stop offset="0.58" stop-color="#f2b88d" stop-opacity="0.55"/>
-              <stop offset="0.72" stop-color="#ffe9c6" stop-opacity="0.4"/>
-              <stop offset="0.87" stop-color="#f5d8b5" stop-opacity="0.1"/>
+              <stop offset="0.12" stop-color="#f2ad84" stop-opacity="0"/>
+              <stop offset="0.3" stop-color="#f2ad84" stop-opacity="0.15"/>
+              <stop offset="0.48" stop-color="#f2b88d" stop-opacity="0.28"/>
+              <stop offset="0.68" stop-color="#f5d4ac" stop-opacity="0.18"/>
+              <stop offset="0.88" stop-color="#f5d8b5" stop-opacity="0.05"/>
               <stop offset="1" stop-color="#f5d8b5" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="wave-sage">
-              <stop stop-color="#a3b8a6" stop-opacity="0"/>
-              <stop offset="0.22" stop-color="#a3b8a6" stop-opacity="0"/>
-              <stop offset="0.42" stop-color="#a3b8a6" stop-opacity="0.18"/>
-              <stop offset="0.58" stop-color="#c3d2b6" stop-opacity="0.4"/>
-              <stop offset="0.73" stop-color="#eee8bf" stop-opacity="0.24"/>
-              <stop offset="0.88" stop-color="#f5e6c1" stop-opacity="0.08"/>
-              <stop offset="1" stop-color="#f5e6c1" stop-opacity="0"/>
             </radialGradient>
           </defs>
           <g id="light"></g>
         </svg>
+        <div class="grain" aria-hidden="true"></div>
         <svg viewBox="0 0 1536 1024" aria-hidden="true">
           <defs>
-            <linearGradient id="rear-hill" x2="0" y1="672" y2="1024" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#7c836f"/>
-              <stop offset="1" stop-color="#757e69"/>
+            <linearGradient id="rear-hill" x1="0" x2="1536" y1="758" y2="1024" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#c7c9c0"/>
+              <stop offset="1" stop-color="#cbccc0"/>
             </linearGradient>
-            <linearGradient id="front-hill" x2="0" y1="742" y2="1024" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#59624e"/>
-              <stop offset="1" stop-color="#4e5845"/>
+            <linearGradient id="front-hill" x2="0" y1="809" y2="1024" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#c2c3b9"/>
+              <stop offset="1" stop-color="#bfc1b6"/>
             </linearGradient>
+            <clipPath id="rear-land">
+              <path d="M0 786C512 710 1024 814 1536 782V1024H0Z"/>
+            </clipPath>
+            <clipPath id="front-land">
+              <path d="M0 820C512 830 1024 790 1536 817V1024H0Z"/>
+            </clipPath>
+            <filter id="soft-pigment" x="-15%" y="-60%" width="130%" height="220%" color-interpolation-filters="sRGB">
+              <feTurbulence type="fractalNoise" baseFrequency="0.018 0.045" numOctaves="4" seed="9" result="settling"/>
+              <feDisplacementMap in="SourceGraphic" in2="settling" scale="32" xChannelSelector="R" yChannelSelector="G"/>
+              <feGaussianBlur stdDeviation="4" result="wash"/>
+              <feTurbulence type="fractalNoise" baseFrequency="0.032 0.065" numOctaves="3" seed="4" result="granulation"/>
+              <feColorMatrix in="granulation" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.65 0 0 0 0.10" result="density"/>
+              <feComposite in="wash" in2="density" operator="in"/>
+            </filter>
           </defs>
-          <path d="M0 712.56C42.67 706.61 85.33 698.90 128 691.79C170.67 684.68 213.33 678.17 256 674.62C298.67 671.08 341.33 670.50 384 672.95C426.67 675.40 469.33 680.88 512 687.04C554.67 693.20 597.33 700.03 640 706.13C682.67 712.23 725.33 717.58 768 723.06C810.67 728.54 853.33 734.14 896 737.93C938.67 741.72 981.33 743.70 1024 743.00C1066.67 742.29 1109.33 738.90 1152 733.89C1194.67 728.87 1237.33 722.22 1280 715.78C1322.67 709.34 1365.33 703.10 1408 699.08C1450.33 695.08 1492.67 693.26 1535 695.58H1536V1024H0Z" fill="url(#rear-hill)"/>
-          <path d="M0 743.89C42.67 741.88 85.33 741.02 128 741.00C170.67 740.98 213.33 741.80 256 743.17C298.67 744.54 341.33 746.46 384 748.66C426.67 750.86 469.33 753.35 512 755.47C554.67 757.59 597.33 759.35 640 761.47C682.67 763.58 725.33 766.05 768 768.11C810.67 770.17 853.33 771.82 896 773.65C938.67 775.49 981.33 777.52 1024 779.22C1066.67 780.91 1109.33 782.27 1152 783.82C1194.67 785.37 1237.33 787.12 1280 788.57C1322.67 790.03 1365.33 791.20 1408 792.11C1450.33 793.00 1492.67 793.63 1535 794.00H1536V1024H0Z" fill="url(#front-hill)"/>
+          <g clip-path="url(#rear-land)">
+            <path d="M0 786C512 710 1024 814 1536 782V1024H0Z" fill="url(#rear-hill)"/>
+            <g filter="url(#soft-pigment)">
+              <path d="M-293 747.0L12 751.3L170 765.0L384 773.8L332 818.8L97 853.7L-118 853.0L-293 813.0Z" fill="#80957f" opacity="0.064"/>
+              <path d="M233 698.7L524 701.5L740 735.2L1013 753.9L1087 799.1L868 831.6L595 829.3L329 790.8Z" fill="#c7b897" opacity="0.070"/>
+              <path d="M951 752.8L1129 739.7L1339 763.3L1627 743.0L1637 902.0L1398 930.6L1166 866.9L1037 811.0Z" fill="#829d88" opacity="0.050"/>
+            </g>
+          </g>
+          <g clip-path="url(#front-land)">
+            <path d="M0 820C512 830 1024 790 1536 817V1024H0Z" fill="url(#front-hill)"/>
+            <g filter="url(#soft-pigment)">
+              <path d="M-220 829.0L85 836.2L243 867.5L457 882.7L405 927.6L170 949.6L-45 935.0L-220 895.0Z" fill="#80957f" opacity="0.230"/>
+              <path d="M306 804.9L597 806.9L813 828.2L1086 829.6L1160 871.5L941 916.0L668 931.3L402 899.7Z" fill="#c7b897" opacity="0.250"/>
+              <path d="M1024 832.0L1202 810.7L1412 834.7L1700 826.0L1710 985.0L1471 1004.9L1239 937.0L1110 885.5Z" fill="#829d88" opacity="0.180"/>
+              <path d="M-120 911.0L70 893.1L201 902.6L343 945.5L282 995.2L117 1019.5L-18 997.0L-120 955.0Z" fill="#8d9c85" opacity="0.180"/>
+              <path d="M396 937.8L572 904.4L670 909.3L791 965.6L951 988.8L867 1074.2L604 1086.7L422 1030.3Z" fill="#a89b80" opacity="0.250"/>
+              <path d="M1155 878.5L1240 856.0L1300 847.9L1399 876.3L1512 892.8L1465 924.7L1321 931.3L1190 904.6Z" fill="#829d88" opacity="0.160"/>
+              <path d="M809 917.3L963 890.7L1094 898.5L1216 926.8L1198 968.7L1050 984.8L951 963.8L866 976.2Z" fill="#eee4c9" opacity="0.140"/>
+            </g>
+          </g>
         </svg>
-        <div class="grain" aria-hidden="true"></div>
         <button class="circle" type="button" aria-label="Send a wave of light" disabled>
           <img src="assets/circle.svg" width="240" height="230" alt="" draggable="false" fetchpriority="high">
         </button>
