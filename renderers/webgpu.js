@@ -1,5 +1,8 @@
 async function source(name) {
-  const response = await fetch(new URL(`../shaders/${name}.wgsl`, import.meta.url), {
+  const url = new URL(`../shaders/${name}.wgsl`, import.meta.url);
+  url.search = new URL(import.meta.url).search;
+  const response = await fetch(url, {
+    cache: "no-cache",
     signal: AbortSignal.timeout(10000),
   });
   if (!response.ok) throw new Error(`Could not load ${name} shader (${response.status})`);

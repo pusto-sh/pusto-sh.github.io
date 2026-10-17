@@ -179,7 +179,7 @@ fn brushFibres(p: vec2f, time: f32) -> vec2f {
   let lane = radius * 0.48 + bend
     + noise(vec2f(radius * 0.16, dot(direction, vec2f(2.1, 1.7)))) * 0.7;
   let seed = hash(vec2f(floor(lane), 19.4));
-  let aa = max(0.018, 0.24 * u.view.x / u.frame.x / u.view.z);
+  let aa = max(0.018, 0.24 * u.view.x / u.frame.x / (u.view.z * brushScale()));
   let thread = 1.0 - smoothstep(0.10 - aa, 0.10 + aa, abs(fract(lane) - 0.5));
   let broken = 0.3 + 0.7 * smoothstep(0.25, 0.8,
     noise(vec2f(radius * 0.62, along * 0.65)));
@@ -197,16 +197,17 @@ fn ink(p: vec2f) -> f32 {
 @fragment fn landscape(in: VertexOutput) -> @location(0) vec4f {
   let time = u.frame.z * u.interaction.z;
   let point = worldPoint(in.uv);
-  let toward = (u.pointer.xy - CENTER) * 0.014 * u.pointer.z * u.interaction.z;
+  let skyPoint = brushPoint(point);
+  let toward = (brushPoint(u.pointer.xy) - CENTER) * 0.014 * u.pointer.z * u.interaction.z;
   let breath = sin(time * 0.43) * 0.5 + 0.5;
   let energy = u.pointer.w * 0.85;
   let wave = warmWave(point);
-  let refracted = point + wave.xy;
+  let refracted = skyPoint + wave.xy;
   let air = fbm(refracted * 0.0035 + vec2f(time * 0.018, -time * 0.009));
   let flow = fbm(refracted * 0.0024 + vec2f(air * 1.6, -air * 1.2)
     + vec2f(time * 0.018, -time * 0.011));
   let heat = sin(refracted.y * 0.021 + air * 5.0 + time * 0.32);
-  let proximity = exp(-dot((point - CENTER) / 440.0, (point - CENTER) / 440.0));
+  let proximity = exp(-dot((skyPoint - CENTER) / 440.0, (skyPoint - CENTER) / 440.0));
   let fluid = vec2f(sin(refracted.y * 0.008 + flow * 6.0 + time * 0.16),
     cos(refracted.x * 0.006 + flow * 5.0 - time * 0.12));
   let p = refracted + (vec2f(heat, air - 0.5) * 3.0
@@ -214,7 +215,8 @@ fn ink(p: vec2f) -> f32 {
   let lightCenter = vec2f(1144.0, 443.0) + toward + vec2f(sin(time * 0.12) * 5.0, cos(time * 0.09) * 4.0);
   let q = (p - lightCenter) / vec2f(810.0, 740.0);
   let sunlight = exp(-dot(q, q) * 4.5);
-  let sky = mix(vec3f(0.40, 0.52, 0.54), vec3f(0.70, 0.62, 0.55), p.y / WORLD.y);
+  let skyDepth = point.y + (p.y - skyPoint.y) * u.view.z * brushScale() / u.view.w;
+  let sky = mix(vec3f(0.40, 0.52, 0.54), vec3f(0.70, 0.62, 0.55), skyDepth / WORLD.y);
   var color = mix(sky, vec3f(1.0, 0.83, 0.64), sunlight * 0.99);
   color += (air - 0.5) * vec3f(0.027, 0.023, 0.017) * (0.35 + sunlight);
   color += proximity * vec3f(0.030, 0.019, 0.008) * (breath + u.pointer.w * 2.0);
@@ -250,7 +252,7 @@ fn ink(p: vec2f) -> f32 {
     }
   }
 
-  let ringPoint = point;
+  let ringPoint = skyPoint;
   let mask = ink(ringPoint);
   let radius = length(ringPoint - CENTER);
   let angle = atan2(ringPoint.y - CENTER.y, ringPoint.x - CENTER.x);
@@ -280,7 +282,8 @@ fn ink(p: vec2f) -> f32 {
   let edge = clamp(length(rim) * 1.4, 0.0, 1.0);
   let edgeLight = u.pointer.z * 0.7 + u.pointer.w * 0.9 + u.interaction.y * 0.5;
   color += edge * vec3f(1.3, 0.95, 0.56) * edgeLight;
-  let paper = (noise(point * 0.5) - 0.5) * 0.007 + (hash(point * 1.7) - 0.5) * 0.004;
+  let paperPoint = mix(skyPoint, point, rearMask);
+  let paper = (noise(paperPoint * 0.5) - 0.5) * 0.007 + (hash(paperPoint * 1.7) - 0.5) * 0.004;
   color += paper * mix(1.0, 0.15, rearMask);
   // Alpha stores terrain coverage for bloom and chromatic-aberration masking.
   return vec4f(max(color, vec3f(0.0)), rearMask);

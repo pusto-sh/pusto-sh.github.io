@@ -25,6 +25,8 @@ Use `?renderer=webgl2` or `?renderer=svg` to force a fallback. `main[data-render
 ## Maintenance
 
 - Keep WGSL, GLSL, and SVG geometry aligned in the 1536 × 1024 coordinate system. Keep the 128-byte uniform layout synchronized between `atmosphere.js` and both GPU backends.
+- The scene fits the viewport width with independent x/y scales in `view.zw`. Sky textures, brush, and waves use uniform scaling, capped at 1.5 times the horizontal scene scale; keep the CSS button bounds aligned with that mapping.
+- The `v` query on `scene.js` propagates to renderer modules and shaders. Bump the script and stylesheet revisions in `index.html` when their interfaces or layout change. Shader requests revalidate cached content.
 - Hill contours, wash boundaries, and ground grain stay fixed. Ground animation changes density and illumination only. Refraction excludes the terrain and brush mask; the scene alpha channel masks bloom and chromatic separation off the ground.
 - Startup reveals the GPU canvas after its first frame. Initialization or graphics failures fall back from WebGPU to WebGL2 to SVG. Forced colors and JavaScript-disabled browsers use SVG directly.
 - Reduced motion freezes ambient animation, disables expanding waves and the startup fade, and stops rendering at rest. Hidden tabs pause rendering.

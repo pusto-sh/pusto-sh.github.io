@@ -20,14 +20,14 @@
         document.documentElement.classList.add("render-pending");
       }
     </script>
-    <link rel="stylesheet" href="scene.css?v=6">
-    <script src="scene.js?v=7" type="module" onerror="document.documentElement.classList.remove('render-pending')"></script>
+    <link rel="stylesheet" href="scene.css?v=9">
+    <script src="scene.js?v=9" type="module" onerror="document.documentElement.classList.remove('render-pending')"></script>
     <script nomodule>document.documentElement.classList.remove("render-pending");</script>
   </head>
   <body>
     <main aria-label="pusto.sh">
       <div class="scene">
-        <svg viewBox="0 0 1536 1024" aria-hidden="true">
+        <svg viewBox="0 0 1536 1024" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="sky" x2="0" y2="1024" gradientUnits="userSpaceOnUse">
               <stop stop-color="#aeb8af"/>
@@ -80,7 +80,7 @@
           <path d="M0 0H1536V1024H0Z" fill="url(#sky)"/>
           <path d="M0 0H1536V1024H0Z" fill="url(#sunlight)"/>
         </svg>
-        <svg viewBox="0 0 1536 1024" aria-hidden="true">
+        <svg viewBox="0 0 1536 1024" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <radialGradient id="bloom">
               <stop stop-color="#fff0cd" stop-opacity="0.75"/>
@@ -101,7 +101,7 @@
           <g id="light"></g>
         </svg>
         <div class="grain" aria-hidden="true"></div>
-        <svg viewBox="0 0 1536 1024" aria-hidden="true">
+        <svg viewBox="0 0 1536 1024" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="rear-hill" x1="0" x2="1536" y1="758" y2="1024" gradientUnits="userSpaceOnUse">
               <stop stop-color="#c7c9c0"/>

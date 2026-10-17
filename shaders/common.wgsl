@@ -1,6 +1,6 @@
 struct Uniforms {
   frame: vec4f,
-  view: vec4f,
+  view: vec4f, // CSS width/height, scene scale x/y.
   pointer: vec4f,
   interaction: vec4f,
   pulses: array<vec4f, 4>,
@@ -25,9 +25,18 @@ struct VertexOutput {
 }
 
 fn worldPoint(uv: vec2f) -> vec2f {
-  let size = WORLD * u.view.z;
-  let offset = (u.view.xy - size) * vec2f(0.82, 0.5);
-  return (uv * u.view.xy - offset) / u.view.z;
+  let size = WORLD * u.view.zw;
+  let offset = (u.view.xy - size) * 0.5;
+  return (uv * u.view.xy - offset) / u.view.zw;
+}
+
+fn brushScale() -> f32 {
+  return min(u.view.w / u.view.z, 1.5);
+}
+
+fn brushPoint(point: vec2f) -> vec2f {
+  // Uniform sampling for sky, brush, and waves; layout coordinates still position the terrain.
+  return CENTER + (point - CENTER) * u.view.zw / (u.view.z * brushScale());
 }
 
 fn hash(p: vec2f) -> f32 {
@@ -59,7 +68,8 @@ fn iridescence(phase: f32) -> vec3f {
 }
 
 // Returns xy displacement, z warmth, and w signed light modulation.
-fn warmWave(point: vec2f) -> vec4f {
+fn warmWave(scenePoint: vec2f) -> vec4f {
+  let point = brushPoint(scenePoint);
   let local = point - CENTER;
   let radius = length(local);
   if (radius <= 120.0 || u.interaction.z == 0.0) { return vec4f(0.0); }

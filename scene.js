@@ -51,7 +51,10 @@ function releaseLight() {
   if (document.hidden || activePulses.size >= 3) return;
 
   const group = document.createElementNS(svgNamespace, "g");
-  group.setAttribute("transform", "translate(1168 437)");
+  const bounds = document.querySelector(".scene").getBoundingClientRect();
+  const scaleX = bounds.width / 1536, scaleY = bounds.height / 1024;
+  const brushScale = Math.min(scaleY / scaleX, 1.5);
+  group.setAttribute("transform", `translate(1168 437) scale(${brushScale} ${brushScale * scaleX / scaleY})`);
   light.append(group);
 
   const animations = [];
@@ -112,9 +115,12 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) settle();
 });
 window.addEventListener("pagehide", settle);
+window.addEventListener("resize", settle);
 reducedMotion.addEventListener("change", settle);
 
-import("./atmosphere.js")
+const atmosphereURL = new URL("./atmosphere.js", import.meta.url);
+atmosphereURL.search = new URL(import.meta.url).search;
+import(atmosphereURL)
   .then(({ createAtmosphere }) => createAtmosphere(document.querySelector("main"), button, reducedMotion, rendererReady))
   .then(renderer => {
     atmosphere = renderer;

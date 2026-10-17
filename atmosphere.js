@@ -1,6 +1,3 @@
-import { createWebGPU } from "./renderers/webgpu.js";
-import { createWebGL } from "./renderers/webgl.js";
-
 export async function createAtmosphere(root, button, reducedMotion, onReady) {
   const requested = new URLSearchParams(location.search).get("renderer");
   if (requested === "svg" || matchMedia("(forced-colors: active)").matches) return null;
@@ -17,6 +14,7 @@ export async function createAtmosphere(root, button, reducedMotion, onReady) {
   let pressed = false, hovering = false, hoverTarget = 0, hover = 0, charge = 0;
   let pointerX = 1168, pointerY = 437, targetX = 1168, targetY = 437;
   let width = 0, height = 0, pixelWidth = 0, pixelHeight = 0;
+  let scaleX = 1, scaleY = 1;
   let quality = 1, frameAverage = 16.7, measuredFrames = 0, lastResize = 0;
   let lastPulse = -100, suspended = document.hidden, installing = false;
 
@@ -24,6 +22,8 @@ export async function createAtmosphere(root, button, reducedMotion, onReady) {
     if (!engine) return;
     const bounds = root.getBoundingClientRect();
     width = bounds.width; height = bounds.height;
+    scaleX = width / 1536;
+    scaleY = Math.max(height / 1024, scaleX);
     const budget = engine.backend === "webgpu" ? 3000000 : 1600000;
     const ratio = Math.min(devicePixelRatio || 1, 2, Math.sqrt(budget / (width * height))) * quality;
     const w = Math.max(1, Math.round(width * ratio));
@@ -69,9 +69,8 @@ export async function createAtmosphere(root, button, reducedMotion, onReady) {
         resonance += pulse.strength * (1 - Math.exp(-age * 3)) * Math.exp(-age * 0.27);
       }
     }
-    const scale = Math.max(width / 1536, height / 1024);
     values.set([pixelWidth, pixelHeight, elapsed, delta], 0);
-    values.set([width, height, scale, 0], 4);
+    values.set([width, height, scaleX, scaleY], 4);
     values.set([pointerX, pointerY, hover, charge], 8);
     values.set([0, Math.min(flash, 1.2), reducedMotion.matches ? 0 : 1,
       reducedMotion.matches ? 0 : Math.min(resonance, 1.4)], 12);
@@ -102,7 +101,10 @@ export async function createAtmosphere(root, button, reducedMotion, onReady) {
       else void recover(error);
     };
     try {
-      engine = await (webgpu ? createWebGPU : createWebGL)(canvas, mask, fail);
+      const url = new URL(webgpu ? "./renderers/webgpu.js" : "./renderers/webgl.js", import.meta.url);
+      url.search = new URL(import.meta.url).search;
+      const backend = await import(url);
+      engine = await (webgpu ? backend.createWebGPU : backend.createWebGL)(canvas, mask, fail);
       if (earlyFailure) throw earlyFailure;
       pixelWidth = pixelHeight = 0;
       fit();
@@ -138,9 +140,8 @@ export async function createAtmosphere(root, button, reducedMotion, onReady) {
   root.addEventListener("pointermove", event => {
     if (!finePointer.matches) return;
     const bounds = root.getBoundingClientRect();
-    const scale = Math.max(width / 1536, height / 1024);
-    targetX = (event.clientX - bounds.left - (width - 1536 * scale) * 0.82) / scale;
-    targetY = (event.clientY - bounds.top - (height - 1024 * scale) * 0.5) / scale;
+    targetX = (event.clientX - bounds.left) / scaleX;
+    targetY = (event.clientY - bounds.top - (height - 1024 * scaleY) * 0.5) / scaleY;
     wake();
   });
   function updateHighlight() {

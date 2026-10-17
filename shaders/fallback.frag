@@ -14,6 +14,10 @@ const vec2 WORLD = vec2(1536., 1024.);
 const vec2 CENTER = vec2(1168., 437.);
 const vec4 REAR = vec4(786.,710.,814.,782.);
 const vec4 FRONT = vec4(820.,830.,790.,817.);
+float brushScale() { return min(view.w/view.z,1.5); }
+vec2 brushPoint(vec2 point) {
+  return CENTER+(point-CENTER)*view.zw/(view.z*brushScale());
+}
 float hash(vec2 p) {
   vec3 q=fract(vec3(p.x,p.y,p.x)*.1031);
   q+=dot(q,q.yzx+33.33);
@@ -28,7 +32,8 @@ float bell(float x,float w) { return exp(-x*x/(w*w)); }
 vec3 iridescence(float phase) {
   return vec3(.59,.54,.55)+vec3(.37,.34,.34)*cos(6.283185*(phase+vec3(0.,.28,.54)));
 }
-vec4 warmWave(vec2 point) {
+vec4 warmWave(vec2 scenePoint) {
+  vec2 point=brushPoint(scenePoint);
   vec2 local=point-CENTER;
   float radius=length(local);
   if(radius<=120.||interaction.z==0.) return vec4(0.);
@@ -197,7 +202,7 @@ vec2 brushFibres(vec2 p,float time) {
     +.12*sin(dot(direction,vec2(-5.,3.))+radius*.67-time*.24);
   float lane=radius*.48+bend+noise(vec2(radius*.16,dot(direction,vec2(2.1,1.7))))*.7;
   float seed=hash(vec2(floor(lane),19.4));
-  float aa=max(.018,.24*view.x/frame.x/view.z);
+  float aa=max(.018,.24*view.x/frame.x/(view.z*brushScale()));
   float thread=1.-smoothstep(.10-aa,.10+aa,abs(fract(lane)-.5));
   float broken=.3+.7*smoothstep(.25,.8,noise(vec2(radius*.62,along*.65)));
   float glint=pow(max(0.,sin(along+time*(.24+seed*.15)+seed*6.283185)),10.);
@@ -210,22 +215,24 @@ float ink(vec2 p) {
 }
 void main() {
   float time=frame.z*interaction.z;
-  vec2 size=WORLD*view.z, offset=(view.xy-size)*vec2(.82,.5);
-  vec2 point=(uv*view.xy-offset)/view.z;
-  vec2 toward=(pointer.xy-CENTER)*.014*pointer.z*interaction.z;
+  vec2 size=WORLD*view.zw, offset=(view.xy-size)*.5;
+  vec2 point=(uv*view.xy-offset)/view.zw;
+  vec2 skyPoint=brushPoint(point);
+  vec2 toward=(brushPoint(pointer.xy)-CENTER)*.014*pointer.z*interaction.z;
   float breath=sin(time*.43)*.5+.5;
   float energy=pointer.w*.85;
   vec4 wave=warmWave(point);
-  vec2 refracted=point+wave.xy;
+  vec2 refracted=skyPoint+wave.xy;
   float air=fbm(refracted*.0035+vec2(time*.018,-time*.009));
   float flow=fbm(refracted*.0024+vec2(air*1.6,-air*1.2)+vec2(time*.018,-time*.011));
-  float proximity=exp(-dot((point-CENTER)/440.,(point-CENTER)/440.));
+  float proximity=exp(-dot((skyPoint-CENTER)/440.,(skyPoint-CENTER)/440.));
   vec2 fluid=vec2(sin(refracted.y*.008+flow*6.+time*.16),cos(refracted.x*.006+flow*5.-time*.12));
   vec2 p=refracted+(vec2(sin(refracted.y*.021+air*5.+time*.32),air-.5)*3.+fluid*(3.+energy*18.))*proximity*interaction.z;
   vec2 lightCenter=vec2(1144,443)+toward+vec2(sin(time*.12)*5.,cos(time*.09)*4.);
   vec2 q=(p-lightCenter)/vec2(810,740);
   float sunlight=exp(-dot(q,q)*4.5);
-  vec3 color=mix(mix(vec3(.40,.52,.54),vec3(.70,.62,.55),p.y/1024.),vec3(1.,.83,.64),sunlight*.99);
+  float skyDepth=point.y+(p.y-skyPoint.y)*view.z*brushScale()/view.w;
+  vec3 color=mix(mix(vec3(.40,.52,.54),vec3(.70,.62,.55),skyDepth/1024.),vec3(1.,.83,.64),sunlight*.99);
   color+=(air-.5)*vec3(.027,.023,.017)*(.35+sunlight);
   color+=proximity*vec3(.030,.019,.008)*(breath+pointer.w*2.);
   color+=proximity*vec3(.027,.016,.006)*(pointer.z+interaction.w*.35);
@@ -254,10 +261,10 @@ void main() {
       color=mix(color,frontColor,frontMask);
     }
   }
-  vec2 ringPoint=point;
+  vec2 ringPoint=skyPoint;
   float radius=length(ringPoint-CENTER),angle=atan(ringPoint.y-CENTER.y,ringPoint.x-CENTER.x);
   vec3 film=iridescence(angle/6.283185+radius*.009-time*.035+flow*.4);
-  float split=(.3+pointer.w*2.2)*interaction.z*view.x/frame.x/view.z;
+  float split=(.3+pointer.w*2.2)*interaction.z*view.x/frame.x/(view.z*brushScale());
   vec2 radial=normalize(ringPoint-CENTER+vec2(.001));
   vec3 mask=vec3(ink(ringPoint+radial*split),ink(ringPoint),ink(ringPoint-radial*split));
   float grain=noise(ringPoint*.74);
@@ -281,7 +288,8 @@ void main() {
   float halo=max(0.,(ink(ringPoint+vec2(4,0))+ink(ringPoint-vec2(4,0))
     +ink(ringPoint+vec2(0,4))+ink(ringPoint-vec2(0,4)))*.25-mask.g);
   color+=halo*vec3(.40,.28,.13)*edgeLight;
-  color+=((noise(point*.5)-.5)*.007+(hash(point*1.7)-.5)*.004)*mix(1.,.15,rearMask);
+  vec2 paperPoint=mix(skyPoint,point,rearMask);
+  color+=((noise(paperPoint*.5)-.5)*.007+(hash(paperPoint*1.7)-.5)*.004)*mix(1.,.15,rearMask);
   float peak=max(color.r,max(color.g,color.b));
   float shoulder=.94+.06*(1.-exp(-max(peak-.94,0.)/.06));
   color*=min(1.,shoulder/max(peak,.0001));

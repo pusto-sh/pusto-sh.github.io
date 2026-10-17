@@ -4,7 +4,7 @@
 
 @fragment fn composite(in: VertexOutput) -> @location(0) vec4f {
   let p = worldPoint(in.uv);
-  let delta = (p - CENTER) / WORLD.y;
+  let delta = (brushPoint(p) - CENTER) / WORLD.y;
   let painted = textureSampleLevel(painting, linearSampler, in.uv, 0.0);
   let atmosphere = 1.0 - painted.a;
   let chroma = (0.3 + u.pointer.w * 2.2)

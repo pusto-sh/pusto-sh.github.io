@@ -30,14 +30,14 @@ main {
   isolation: isolate;
 }
 
-/* One 3:2 coordinate system keeps the artwork, light, and hit area aligned. */
+/* Match the shaders' independent x/y scales while retaining the 3:2 minimum height. */
 .scene {
   position: absolute;
   top: 50%;
-  left: 82%;
-  width: max(100vw, calc(var(--scene-height) * 1.5));
+  left: 50%;
+  width: 100%;
   height: max(var(--scene-height), 66.666667vw);
-  transform: translate(-82%, -50%);
+  transform: translate(-50%, -50%);
   z-index: 1;
 }
 
@@ -90,10 +90,12 @@ main[data-renderer] .circle img {
 
 .circle {
   position: absolute;
-  left: 68.229167%;
-  top: 31.640625%;
-  width: 15.625%;
-  height: 22.460938%;
+  left: 76.041667%;
+  top: 42.67578125%;
+  width: clamp(15.625%, calc(var(--scene-height) * 0.234375), 23.4375%);
+  aspect-ratio: 240 / 230;
+  transform: translate(-50%, -49.130435%);
+  transform-origin: 50% 49.130435%;
   display: block;
   padding: 0;
   border: 0;
@@ -108,7 +110,7 @@ main[data-renderer] .circle img {
 }
 
 main[data-renderer] .circle {
-  transform: scale(1.16);
+  transform: translate(-50%, -49.130435%) scale(1.16);
 }
 
 .circle img {

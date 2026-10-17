@@ -32,7 +32,9 @@ export async function createWebGL(canvas, mask, onFailure) {
     if (!disposed) onFailure(new Error("WebGL context lost"));
   });
   try {
-    const response = await fetch(new URL("../shaders/fallback.frag", import.meta.url), { signal: AbortSignal.timeout(10000) });
+    const url = new URL("../shaders/fallback.frag", import.meta.url);
+    url.search = new URL(import.meta.url).search;
+    const response = await fetch(url, { cache: "no-cache", signal: AbortSignal.timeout(10000) });
     if (!response.ok) throw new Error(`Could not load fallback shader (${response.status})`);
     gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
     gl.attachShader(program, compile(gl.FRAGMENT_SHADER, await response.text()));
