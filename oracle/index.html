@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A quiet place for a personal reading. Bring your birth details, and a question if you have one."
+    />
+    <meta name="referrer" content="no-referrer" />
+    <title>Oracle · pusto.sh</title>
+    <link rel="stylesheet" href="oracle.css" />
+    <script type="module" src="oracle.js"></script>
+  </head>
+  <body>
+    <header>
+      <a href="/" class="home">pusto.sh</a><span>A moment to listen</span>
+    </header>
+    <main>
+      <div class="introduction">
+        <img
+          src="/assets/circle.svg"
+          width="72"
+          height="69"
+          alt=""
+          class="brush"
+        />
+        <h1>Oracle</h1>
+        <p class="invitation">Bring a question.<br />Or begin with yourself.</p>
+        <p class="aside">
+          A personal reading for reflection. <br />Room for possibility, not
+          certainty.
+        </p>
+      </div>
+      <div class="workspace">
+        <form id="birth-form">
+          <fieldset>
+            <legend>Your beginning</legend>
+            <label for="birth-date">Birth date</label
+            ><input
+              id="birth-date"
+              name="date"
+              type="date"
+              min="1900-01-02"
+              max="2099-12-30"
+              required
+            />
+            <label for="place-query">Birthplace</label>
+            <div class="search">
+              <input
+                id="place-query"
+                type="search"
+                autocomplete="off"
+                placeholder="City or town"
+                minlength="2"
+                maxlength="80"
+                aria-describedby="place-help"
+              /><button type="button" id="find-place">Find place</button>
+            </div>
+            <p class="hint" id="place-help">
+              Choose your birthplace from the results.
+            </p>
+            <div
+              id="place-results"
+              role="group"
+              aria-label="Matching birthplaces"
+            ></div>
+            <p id="chosen-place" class="chosen" hidden></p>
+            <div class="label" id="time-label">Birth time</div>
+            <div class="choices" role="group" aria-labelledby="time-label">
+              <label
+                ><input type="radio" name="time-kind" value="exact" checked />
+                Exact</label
+              ><label
+                ><input type="radio" name="time-kind" value="approximate" /> A
+                range</label
+              ><label
+                ><input type="radio" name="time-kind" value="unknown" /> I don’t
+                know</label
+              >
+            </div>
+            <div id="exact-time">
+              <label for="birth-time" class="hint"
+                >Local time at your birthplace</label
+              ><input id="birth-time" type="time" required />
+            </div>
+            <div id="range-time" hidden>
+              <div class="two-fields">
+                <div>
+                  <label for="time-from">From</label
+                  ><input id="time-from" type="time" disabled />
+                </div>
+                <div>
+                  <label for="time-to">Until</label
+                  ><input id="time-to" type="time" disabled />
+                </div>
+              </div>
+              <label class="check"
+                ><input id="next-day" type="checkbox" disabled /> The range ends
+                the following day</label
+              >
+              <p class="hint">
+                Local birth time, up to 24 hours. The end time is excluded.
+              </p>
+            </div>
+            <p id="unknown-time" class="hint" hidden>
+              You can still receive a reading. Anything that depends on a
+              precise time will remain tentative.
+            </p>
+          </fieldset>
+          <fieldset>
+            <legend>What brings you here?</legend>
+            <div class="choices mode">
+              <label
+                ><input type="radio" name="mode" value="general" checked /> A
+                general reading</label
+              ><label
+                ><input type="radio" name="mode" value="question" /> I have a
+                question</label
+              >
+            </div>
+            <div id="question-fields" hidden>
+              <label for="question">Your question</label
+              ><textarea
+                id="question"
+                rows="4"
+                maxlength="1200"
+                placeholder="What would you like to understand?"
+                disabled
+              ></textarea>
+              <label class="check"
+                ><input type="checkbox" id="dated" disabled /> My question
+                concerns a particular period</label
+              >
+              <div id="period-fields" hidden>
+                <div class="two-fields">
+                  <div>
+                    <label for="period-start">First day</label
+                    ><input
+                      type="date"
+                      id="period-start"
+                      min="1900-01-02"
+                      max="2099-12-30"
+                      disabled
+                    />
+                  </div>
+                  <div>
+                    <label for="period-end">Last day</label
+                    ><input
+                      type="date"
+                      id="period-end"
+                      min="1900-01-02"
+                      max="2099-12-30"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <label for="period-zone">Time zone for these dates</label
+                ><input
+                  id="period-zone"
+                  placeholder="e.g. Europe/London"
+                  disabled
+                />
+                <p class="hint">
+                  Both days included. Choose a period of up to one year.
+                </p>
+              </div>
+            </div>
+          </fieldset>
+          <p
+            id="form-error"
+            class="error"
+            role="alert"
+            tabindex="-1"
+            hidden
+          ></p>
+          <button type="submit" class="primary">Receive your reading</button>
+          <p class="privacy">
+            Your details are used to make this reading, sent to a model
+            provider, and are not saved as a reading history. Please leave out
+            names and sensitive details.
+          </p>
+        </form>
+        <section
+          id="waiting"
+          class="waiting"
+          tabindex="-1"
+          aria-live="polite"
+          hidden
+        >
+          <img src="/assets/circle.svg" width="88" height="84" alt="" />
+          <h2>A little quiet.</h2>
+          <p>
+            Your reading is taking shape.<br />This can take a minute or two.
+          </p>
+          <button type="button" id="cancel" class="text-button">
+            Return to your details
+          </button>
+        </section>
+        <article id="result" hidden>
+          <h2 tabindex="-1" id="reading-title">For you</h2>
+          <p id="reading-question" class="reading-question" hidden></p>
+          <div id="reading"></div>
+          <p id="qualification" class="qualification" hidden></p>
+          <button id="edit" class="text-button" type="button">
+            Return to your details
+          </button>
+        </article>
+      </div>
+    </main>
+    <footer>
+      <span>Leave with a thought, not a verdict.</span
+      ><a href="/">Back to the quiet</a>
+    </footer>
+    <noscript
+      >This reading needs JavaScript. Enable it, then reload this
+      page.</noscript
+    >
+  </body>
+</html>

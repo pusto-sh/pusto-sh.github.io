@@ -1,0 +1,308 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-16T07:53:25.646304Z",
+  "title": "Design System: Oracle · pusto.sh",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Olive paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.01469 110.89)",
+          "oklch(26.43% 0.01469 110.89)",
+          "oklch(37.86% 0.01469 110.89)",
+          "oklch(49.29% 0.01469 110.89)",
+          "oklch(60.71% 0.01469 110.89)",
+          "oklch(72.14% 0.01469 110.89)",
+          "oklch(83.57% 0.01469 110.89)",
+          "oklch(95.00% 0.01469 110.89)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Olive ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.02266 147.55)",
+          "oklch(26.43% 0.02266 147.55)",
+          "oklch(37.86% 0.02266 147.55)",
+          "oklch(49.29% 0.02266 147.55)",
+          "oklch(60.71% 0.02266 147.55)",
+          "oklch(72.14% 0.02266 147.55)",
+          "oklch(83.57% 0.02266 147.55)",
+          "oklch(95.00% 0.02266 147.55)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted olive",
+        "tonalRamp": [
+          "oklch(15.00% 0.02879 130.25)",
+          "oklch(26.43% 0.02879 130.25)",
+          "oklch(37.86% 0.02879 130.25)",
+          "oklch(49.29% 0.02879 130.25)",
+          "oklch(60.71% 0.02879 130.25)",
+          "oklch(72.14% 0.02879 130.25)",
+          "oklch(83.57% 0.02879 130.25)",
+          "oklch(95.00% 0.02879 130.25)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Soft olive rule",
+        "tonalRamp": [
+          "oklch(15.00% 0.02522 125.33)",
+          "oklch(26.43% 0.02522 125.33)",
+          "oklch(37.86% 0.02522 125.33)",
+          "oklch(49.29% 0.02522 125.33)",
+          "oklch(60.71% 0.02522 125.33)",
+          "oklch(72.14% 0.02522 125.33)",
+          "oklch(83.57% 0.02522 125.33)",
+          "oklch(95.00% 0.02522 125.33)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Olive accent",
+        "tonalRamp": [
+          "oklch(15.00% 0.04644 139.44)",
+          "oklch(26.43% 0.04644 139.44)",
+          "oklch(37.86% 0.04644 139.44)",
+          "oklch(49.29% 0.04644 139.44)",
+          "oklch(60.71% 0.04644 139.44)",
+          "oklch(72.14% 0.04644 139.44)",
+          "oklch(83.57% 0.04644 139.44)",
+          "oklch(95.00% 0.04644 139.44)"
+        ]
+      },
+      "error": {
+        "role": "error",
+        "displayName": "Rust alert",
+        "tonalRamp": [
+          "oklch(15.00% 0.11616 31.01)",
+          "oklch(26.43% 0.11616 31.01)",
+          "oklch(37.86% 0.11616 31.01)",
+          "oklch(49.29% 0.11616 31.01)",
+          "oklch(60.71% 0.11616 31.01)",
+          "oklch(72.14% 0.11616 31.01)",
+          "oklch(83.57% 0.11616 31.01)",
+          "oklch(95.00% 0.11616 31.01)"
+        ]
+      },
+      "field-surface": {
+        "role": "neutral",
+        "displayName": "Pale field",
+        "tonalRamp": [
+          "oklch(15.00% 0.01189 106.62)",
+          "oklch(26.43% 0.01189 106.62)",
+          "oklch(37.86% 0.01189 106.62)",
+          "oklch(49.29% 0.01189 106.62)",
+          "oklch(60.71% 0.01189 106.62)",
+          "oklch(72.14% 0.01189 106.62)",
+          "oklch(83.57% 0.01189 106.62)",
+          "oklch(95.00% 0.01189 106.62)"
+        ]
+      },
+      "hover-surface": {
+        "role": "primary",
+        "displayName": "Olive hover wash",
+        "tonalRamp": [
+          "oklch(15.00% 0.02377 122.76)",
+          "oklch(26.43% 0.02377 122.76)",
+          "oklch(37.86% 0.02377 122.76)",
+          "oklch(49.29% 0.02377 122.76)",
+          "oklch(60.71% 0.02377 122.76)",
+          "oklch(72.14% 0.02377 122.76)",
+          "oklch(83.57% 0.02377 122.76)",
+          "oklch(95.00% 0.02377 122.76)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Deep olive action",
+        "tonalRamp": [
+          "oklch(15.00% 0.04875 140.54)",
+          "oklch(26.43% 0.04875 140.54)",
+          "oklch(37.86% 0.04875 140.54)",
+          "oklch(49.29% 0.04875 140.54)",
+          "oklch(60.71% 0.04875 140.54)",
+          "oklch(72.14% 0.04875 140.54)",
+          "oklch(83.57% 0.04875 140.54)",
+          "oklch(95.00% 0.04875 140.54)"
+        ]
+      },
+      "primary-text": {
+        "role": "neutral",
+        "displayName": "Warm action text",
+        "tonalRamp": [
+          "oklch(15.00% 0.01186 101.47)",
+          "oklch(26.43% 0.01186 101.47)",
+          "oklch(37.86% 0.01186 101.47)",
+          "oklch(49.29% 0.01186 101.47)",
+          "oklch(60.71% 0.01186 101.47)",
+          "oklch(72.14% 0.01186 101.47)",
+          "oklch(83.57% 0.01186 101.47)",
+          "oklch(95.00% 0.01186 101.47)"
+        ]
+      },
+      "place-surface": {
+        "role": "neutral",
+        "displayName": "Pale place result",
+        "tonalRamp": [
+          "oklch(15.00% 0.01460 110.88)",
+          "oklch(26.43% 0.01460 110.88)",
+          "oklch(37.86% 0.01460 110.88)",
+          "oklch(49.29% 0.01460 110.88)",
+          "oklch(60.71% 0.01460 110.88)",
+          "oklch(72.14% 0.01460 110.88)",
+          "oklch(83.57% 0.01460 110.88)",
+          "oklch(95.00% 0.01460 110.88)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Oracle title",
+        "purpose": "The large serif introduction title."
+      },
+      "headline": {
+        "displayName": "State heading",
+        "purpose": "Waiting and reading headings."
+      },
+      "invitation": {
+        "displayName": "Invitation",
+        "purpose": "The opening serif invitation."
+      },
+      "section-title": {
+        "displayName": "Form legend",
+        "purpose": "The titles of the two form groups."
+      },
+      "reading": {
+        "displayName": "Reading prose",
+        "purpose": "Uninterrupted plain text paragraphs."
+      },
+      "control": {
+        "displayName": "Text control",
+        "purpose": "Native text, date, time, and textarea controls."
+      },
+      "label": {
+        "displayName": "Field label",
+        "purpose": "Visible labels and choice captions."
+      },
+      "hint": {
+        "displayName": "Supporting guidance",
+        "purpose": "Small practical text beside the form."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "waiting-breath",
+        "value": "breathe 3s ease-in-out infinite",
+        "purpose": "The waiting brush changes opacity from 0.6 to 0.3 at its midpoint. Disabled for reduced motion."
+      },
+      {
+        "name": "scroll",
+        "value": "smooth",
+        "purpose": "State changes scroll the workspace into view. Reduced motion restores auto scrolling."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "single-column",
+        "value": "760px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The full-width action at the end of the form.",
+      "html": "<button class=\"ds-primary\" type=\"button\">Receive your reading</button>",
+      "css": ".ds-primary { color: var(--ink, #303b31); cursor: pointer; border: 1px solid var(--accent, #4c6047); border-radius: 3px; background: transparent; min-height: 44px; } .ds-primary:focus-visible { outline: 2px solid var(--accent, #4c6047); outline-offset: 5px; } .ds-primary:disabled { opacity: .6; cursor: wait; } .ds-primary { display: flex; justify-content: space-between; width: 100%; padding: 16px 20px; background: var(--accent, #4c6047); color: #fffef5; font: 16px system-ui, sans-serif; } .ds-primary:hover { background: #384d34; }"
+    },
+    {
+      "name": "Place search action",
+      "kind": "button",
+      "refersTo": "button-search",
+      "description": "A secondary bordered action beside birthplace search.",
+      "html": "<button class=\"ds-search\" type=\"button\">Find place</button>",
+      "css": ".ds-search { color: var(--ink, #303b31); cursor: pointer; border: 1px solid var(--accent, #4c6047); border-radius: 3px; background: transparent; min-height: 44px; } .ds-search:focus-visible { outline: 2px solid var(--accent, #4c6047); outline-offset: 5px; } .ds-search:disabled { opacity: .6; cursor: wait; } .ds-search { font: 14px system-ui, sans-serif; padding: 10px 14px; flex-shrink: 0; } .ds-search:hover { background: #d6dccb; }"
+    },
+    {
+      "name": "Return action",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "A quiet return from the waiting or reading state.",
+      "html": "<button class=\"ds-return\" type=\"button\">Return to your details</button>",
+      "css": ".ds-return { color: var(--ink, #303b31); cursor: pointer; border: 1px solid var(--accent, #4c6047); border-radius: 3px; background: transparent; min-height: 44px; } .ds-return:focus-visible { outline: 2px solid var(--accent, #4c6047); outline-offset: 5px; } .ds-return:disabled { opacity: .6; cursor: wait; } .ds-return { font: 14px system-ui, sans-serif; border: 0; border-bottom: 1px solid var(--line, #a5ac9b); border-radius: 0; padding: 12px 0; margin: 20px 0; background: transparent; } .ds-return:hover { background: transparent; border-color: var(--ink, #303b31); }"
+    },
+    {
+      "name": "Birthplace result",
+      "kind": "button",
+      "refersTo": "button-place",
+      "description": "One readable, left-aligned choice in birthplace results.",
+      "html": "<button class=\"ds-place\" type=\"button\">Aberdeen, Scotland, United Kingdom</button>",
+      "css": ".ds-place { color: var(--ink, #303b31); cursor: pointer; border: 1px solid var(--accent, #4c6047); border-radius: 3px; background: transparent; min-height: 44px; } .ds-place:focus-visible { outline: 2px solid var(--accent, #4c6047); outline-offset: 5px; } .ds-place:disabled { opacity: .6; cursor: wait; } .ds-place { font: 14px/1.5 system-ui, sans-serif; text-align: left; padding: 12px; border-color: var(--line, #a5ac9b); background: #f0f1e6; } .ds-place:hover { background: #d6dccb; }"
+    },
+    {
+      "name": "Labeled text field",
+      "kind": "input",
+      "refersTo": "text-field",
+      "description": "Visible label, native input, and small supporting guidance.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-label\" for=\"ds-place-query\">Birthplace</label><input class=\"ds-input\" id=\"ds-place-query\" type=\"search\" placeholder=\"City or town\" aria-describedby=\"ds-help\" /><p class=\"ds-help\" id=\"ds-help\">Choose your birthplace from the results.</p></div>",
+      "css": ".ds-field { background: var(--paper, #e8e9de); color: var(--ink, #303b31); } .ds-label { display: block; font: 14px/1.45 system-ui, sans-serif; margin: 19px 0 8px; } .ds-input { display: block; width: 100%; min-width: 0; border: 1px solid var(--line, #a5ac9b); border-radius: 3px; background: #f4f4eb; padding: 12px 13px; font: 16px/1.45 system-ui, sans-serif; color: var(--ink, #303b31); caret-color: var(--accent, #4c6047); min-height: 48px; } .ds-input::placeholder { color: #65705e; } .ds-input:focus { border-color: var(--accent, #4c6047); } .ds-input:focus-visible { outline: 2px solid var(--accent, #4c6047); outline-offset: 5px; } .ds-help { font: 13px/1.55 system-ui, sans-serif; color: var(--muted, #596251); margin: 9px 0 0; }"
+    },
+    {
+      "name": "Native time choices",
+      "kind": "custom",
+      "description": "Exact, ranged, and unknown time remain explicit native radio options.",
+      "html": "<div class=\"ds-time\"><div class=\"ds-time-label\" id=\"ds-time-label\">Birth time</div><div class=\"ds-choices\" role=\"group\" aria-labelledby=\"ds-time-label\"><label class=\"ds-choice\"><input type=\"radio\" name=\"ds-time-kind\" checked /> Exact</label><label class=\"ds-choice\"><input type=\"radio\" name=\"ds-time-kind\" /> A range</label><label class=\"ds-choice\"><input type=\"radio\" name=\"ds-time-kind\" /> I don’t know</label></div></div>",
+      "css": ".ds-time { background: var(--paper, #e8e9de); color: var(--ink, #303b31); } .ds-time-label { display: block; font: 14px/1.45 system-ui, sans-serif; margin: 19px 0 8px; } .ds-choices { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-bottom: 15px; } .ds-choice { display: flex; align-items: center; gap: 8px; margin: 0; min-height: 40px; font: 14px/1.45 system-ui, sans-serif; } .ds-choice input { accent-color: var(--accent, #4c6047); width: 17px; height: 17px; flex-shrink: 0; } .ds-choice input:focus-visible { outline: 2px solid var(--accent, #4c6047); outline-offset: 5px; }"
+    },
+    {
+      "name": "Quiet navigation",
+      "kind": "nav",
+      "description": "The small home link and italic phrase used above the surface.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-home\" href=\"/\">pusto.sh</a><span class=\"ds-header-phrase\">A moment to listen</span></header>",
+      "css": ".ds-header { max-width: 1440px; margin: auto; padding: 30px 6vw; display: flex; justify-content: space-between; gap: 24px; background: var(--paper, #e8e9de); color: var(--muted, #596251); font: 14px/1.5 system-ui, sans-serif; } .ds-home { color: inherit; text-decoration: none; text-underline-offset: .25em; letter-spacing: .03em; } .ds-home:hover { color: #172a12; } .ds-home:focus-visible { outline: 2px solid var(--accent, #4c6047); outline-offset: 5px; } .ds-header-phrase { font-style: italic; font-family: Georgia, serif; } @media (max-width: 760px) { .ds-header { padding: 22px 7vw; } .ds-header-phrase { font-size: 13px; } }"
+    },
+    {
+      "name": "Reading and qualification",
+      "kind": "custom",
+      "description": "Plain serif prose followed by a visible sans-serif qualification. Sample prose is illustrative.",
+      "html": "<article class=\"ds-reading\"><h2 class=\"ds-reading-title\" tabindex=\"-1\">For you</h2><p class=\"ds-reading-paragraph\">Your reading appears here as plain paragraphs, with space to pause between thoughts.</p><p class=\"ds-qualification\">Anything that depends on a precise time will remain tentative.</p></article>",
+      "css": ".ds-reading { border-top: 1px solid var(--line, #a5ac9b); padding-top: 8px; background: var(--paper, #e8e9de); color: var(--ink, #303b31); font-family: Georgia, \"Times New Roman\", serif; } .ds-reading-title { font-size: 36px; font-weight: 400; letter-spacing: -.02em; margin: 22px 0 26px; } .ds-reading-title:focus-visible { outline: 2px solid var(--accent, #4c6047); } .ds-reading-paragraph { font-size: 19px; line-height: 1.85; margin: 0 0 24px; } .ds-qualification { font: 14px/1.7 system-ui, sans-serif; color: var(--muted, #596251); border-top: 1px solid var(--line, #a5ac9b); padding-top: 22px; } @media (max-width: 760px) { .ds-reading-paragraph { font-size: 18px; line-height: 1.8; } }"
+    },
+    {
+      "name": "Form alert",
+      "kind": "custom",
+      "description": "A focused error message with a rust-colored upper rule.",
+      "html": "<p class=\"ds-error\" role=\"alert\" tabindex=\"-1\">Find and choose your birthplace before continuing.</p>",
+      "css": ".ds-error { background: var(--paper, #e8e9de); font: 15px/1.55 system-ui, sans-serif; color: var(--error, #8c392c); padding: 14px 0; margin: 0 0 14px; border-top: 1px solid var(--error, #8c392c); } .ds-error:focus-visible { outline: 2px solid var(--accent, #4c6047); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Moment to Listen",
+    "overview": "Oracle carries pusto.sh's quiet olive identity into a form and an uninterrupted reading. Pale paper, dark olive ink, generous space, and the existing brush circle give it a restrained, personal character. The serif voice welcomes and reads; familiar native controls make the task clear.\n\nThis document describes only the `oracle/` surface, as implemented in `index.html`, `oracle.css`, and `oracle.js`. It records the existing design, not a deployment status or a site-wide redesign.",
+    "keyCharacteristics": [
+      "A flat, muted olive palette with fine rules.",
+      "Serif introduction and prose; system sans-serif controls and guidance.",
+      "The existing `assets/circle.svg` brush as the shared identity asset.",
+      "Plain reading text with visible qualifications and a return to the form."
+    ],
+    "rules": [],
+    "dos": [
+      "**Do** preserve the quiet olive palette and the existing brush asset.",
+      "**Do** keep serif reading text distinct from sans-serif controls and guidance.",
+      "**Do** retain visible labels, native control behavior, keyboard focus, and reduced-motion support.",
+      "**Do** present uncertainty beside the reading in plain language."
+    ],
+    "donts": [
+      "**Don't** add shadows, gradients, or card framing to this flat form and reading surface.",
+      "**Don't** turn the reading into a dashboard of charts, badges, or decorative widgets.",
+      "**Don't** hide qualifications in hover-only content or replace unknown birth time with a precise-looking value."
+    ]
+  }
+}
