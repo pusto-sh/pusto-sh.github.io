@@ -33,3 +33,13 @@ Use `?renderer=webgl2` or `?renderer=svg` to force a fallback. `main[data-render
 - Startup reveals the GPU canvas after its first frame. Initialization or graphics failures fall back from WebGPU to WebGL2 to SVG. Forced colors and JavaScript-disabled browsers use SVG directly.
 - Reduced motion freezes ambient animation, disables expanding waves and the startup fade, and stops rendering at rest. Hidden tabs pause rendering.
 - Check click/tap, hold/release, Enter/Space, reduced motion, renderer fallbacks, and mobile Safari browser controls after relevant changes.
+
+## Oracle entry (pending API deployment)
+
+`/oracle/` is a plain static form and uninterrupted reading surface. It imports
+only `oracle/config.js` for public API routing. The private service and Docker
+handoff live in `pusto-sh/oracle`; no credentials, guides, chart facts, or attribution
+are copied here. Set API_BASE to the verified HTTPS service origin before release.
+Until then the deployed form reports that readings are not open; a localhost preview
+can proxy `/api` to the private service. The discreet homepage link is separate from
+the ensō button and does not change its event handling or renderer geometry.
